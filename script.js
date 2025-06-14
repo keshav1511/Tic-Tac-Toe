@@ -58,17 +58,32 @@ const showWinner =(winner)=>{
     disableBoxes();
 };
 
-const checkWinner = () =>{
-    for(let pattern of winPatterns){
+
+const checkWinner = () => {
+    let winnerFound = false;
+    for (let pattern of winPatterns) {
         let pos1Val = boxes[pattern[0]].innerText;
         let pos2Val = boxes[pattern[1]].innerText;
         let pos3Val = boxes[pattern[2]].innerText;
 
-        if(pos1Val != "" && pos2Val != "" && pos3Val != ""){
-            if(pos1Val === pos2Val && pos2Val === pos3Val){
+        if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
+            if (pos1Val === pos2Val && pos2Val === pos3Val) {
                 showWinner(pos1Val);
+                winnerFound = true;
+                return; // Exit early if winner is found
             }
         }
+    }
+
+    let filledBoxes = 0;
+    boxes.forEach((box) => {
+        if (box.innerText !== "") filledBoxes++;
+    });
+
+    if (filledBoxes === 9 && !winnerFound) {
+        message.innerText = "It's a draw!";
+        msgContainer.classList.remove("hide");
+        disableBoxes();
     }
 };
 
